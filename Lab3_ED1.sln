@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab3_ED1", "Lab3_ED1.csproj", "{06B6E08A-4B85-412F-BA3E-5536D79A6EE0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E_Arboles", "E_Arboles\E_Arboles.csproj", "{AE233AB7-C107-4ACD-8804-EBA65E941927}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ELineales", "ELineales\ELineales.csproj", "{6DBEE6DC-CA80-4B38-B754-B7063350B818}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{06B6E08A-4B85-412F-BA3E-5536D79A6EE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06B6E08A-4B85-412F-BA3E-5536D79A6EE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06B6E08A-4B85-412F-BA3E-5536D79A6EE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE233AB7-C107-4ACD-8804-EBA65E941927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE233AB7-C107-4ACD-8804-EBA65E941927}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE233AB7-C107-4ACD-8804-EBA65E941927}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE233AB7-C107-4ACD-8804-EBA65E941927}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DBEE6DC-CA80-4B38-B754-B7063350B818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DBEE6DC-CA80-4B38-B754-B7063350B818}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DBEE6DC-CA80-4B38-B754-B7063350B818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DBEE6DC-CA80-4B38-B754-B7063350B818}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
