@@ -46,9 +46,8 @@ namespace Lab3_ED1.Controllers
                             Project = fields[1],
                             Description = fields[2],
                             Priority = Convert.ToInt32(fields[3]),
-                            Date = Convert.ToInt32(fields[4])
-                        };
-
+                            Date = Convert.ToDateTime(fields[4])
+                        };  
                         Singleton.Instance.hashTable[getHashcode(fields[1])].Add(newAssignment);
                     }
                 }
@@ -110,15 +109,29 @@ namespace Lab3_ED1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddAssignment(IFormCollection collection)
         {
+            int p = 0;
+            if (Convert.ToString(collection["Priority"]) == "Alta")
+            {
+                p = 0;
+            }
+            else if(Convert.ToString(collection["Priority"]) == "Media")
+            {
+                p = 1;
+            }
+            else
+            {
+                p = 2;
+            }
             var newAssignment = new Assignment
             {
                 Name = collection["Name"],
                 Description = collection["Description"],
                 Date = Convert.ToDateTime(collection["Date"]),
                 Project = Convert.ToString(collection["Project"]),
-                Priority = collection["Priority"]
+                Priority = p,
+                Task = collection["Task"]
             };
-            //agregar al hash
+            
             return View();
         }
     }

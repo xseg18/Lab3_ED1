@@ -10,7 +10,7 @@ namespace Lab3_ED1.Models
     {
         [Display(Name = "Título")]
         [Required]
-        public string Name { get; set; }
+        public string Task { get; set; }
         [Display(Name = "Proyecto")]
         [Required]
         public string Project { get; set; }
@@ -23,5 +23,8 @@ namespace Lab3_ED1.Models
         [Display(Name = "Fecha de entrega")]
         [Required]
         public DateTime Date { get; set; }
+        [Display(Name = "Developer Encargado")]
+        [Required]
+        public string Name { get; set; }
     }
 }
