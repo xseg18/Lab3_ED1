@@ -1,15 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Data;
+using System.Text;
 using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Text;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.VisualBasic.FileIO;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.VisualBasic.FileIO;
 using Microsoft.Extensions.Logging;
 using Lab3_ED1.Models;
 
@@ -26,11 +26,11 @@ namespace Lab3_ED1.Controllers
 
         public IActionResult Index()
         {
-
             try
             {
                 if (!start)
                 {
+                    start = true;
                     using (TextFieldParser txtParser = new TextFieldParser("Storage_File.txt"))
                     {
                         txtParser.CommentTokens = new string[] { "#" };
@@ -55,13 +55,17 @@ namespace Lab3_ED1.Controllers
                             {
                                 Singleton.Instance.hashTable[getHashcode(fields[1])] = new ELineales.Lista<Assignment>();
 
+                                if (Singleton.Instance1.devTable[getHashcode(fields[0])] == null)
+                                {
+                                    Singleton.Instance1.devTable[getHashcode(fields[0])] = new E_Arboles.PriorityQueue<int, string>(20);
+                                }
+
+                                Singleton.Instance.hashTable[getHashcode(fields[1])].Add(newAssignment);
+                                Singleton.Instance1.devTable[getHashcode(fields[0])].Add(Convert.ToInt32(fields[4]), fields[1]);
                             }
-                            Singleton.Instance1.PQueue.Add(Convert.ToInt32(fields[4]), Convert.ToString(fields[1]));
-                            Singleton.Instance.hashTable[getHashcode(fields[1])].Add(newAssignment);
                         }
                     }
                 }
-                start = true;
                 return View();
             }
             catch
@@ -71,7 +75,6 @@ namespace Lab3_ED1.Controllers
             }
         }
         
-
         public IActionResult Privacy()
         {
             return View();
@@ -101,7 +104,7 @@ namespace Lab3_ED1.Controllers
             StreamWriter writer = new StreamWriter("Storage_File.txt", true);
             for (int i = 0; i < Singleton.Instance.hashTable.Length; i++)
             {
-                if (Singleton.Instance.hashTable[i].Count() > 0)
+                if (Singleton.Instance.hashTable[i] != null)
                 {
                     foreach (var item in Singleton.Instance.hashTable[i])
                     {
@@ -140,22 +143,27 @@ namespace Lab3_ED1.Controllers
                 Name = collection["Name"],
                 Title = collection["Title"],
                 Project = collection["Project"],
-                Description = collection["Desciption"],
+                Description = collection["Description"],
                 Priority = p,
                 Date = Convert.ToDateTime(collection["Date"])
             };
-            Singleton.Instance1.PQueue.Add(p, collection["Task"]);
-            if (Singleton.Instance.hashTable[getHashcode(collection["Task"])] == null)
+
+            if (Singleton.Instance.hashTable[getHashcode(collection["Title"])] == null)
             {
-                Singleton.Instance.hashTable[getHashcode(collection["Task"])] = new ELineales.Lista<Assignment>();
-                Singleton.Instance.hashTable[getHashcode(collection["Task"])].Add(newAssignment);
+                Singleton.Instance.hashTable[getHashcode(collection["Title"])] = new ELineales.Lista<Assignment>();
+
+                if (Singleton.Instance1.devTable[getHashcode(collection["Name"])] == null)
+                {
+                    Singleton.Instance1.devTable[getHashcode(collection["Name"])] = new E_Arboles.PriorityQueue<int, string>(20);
+                }
+
+                Singleton.Instance.hashTable[getHashcode(collection["Title"])].Add(newAssignment);
+                Singleton.Instance1.devTable[getHashcode(collection["Name"])].Add(p, collection["Title"]);
             }
             else
             {
                 //mensaje de repetición
             }
-
-            Singleton.Instance.hashTable[getHashcode(collection["Name"])].Add(newAssignment);
             updateFile();
 
             return View();
