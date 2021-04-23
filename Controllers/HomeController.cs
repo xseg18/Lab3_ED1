@@ -144,20 +144,18 @@ namespace Lab3_ED1.Controllers
                 Priority = p,
                 Date = Convert.ToDateTime(collection["Date"])
             };
-            Singleton.Instance1.PQueue.Add(p, collection["Task"]);
             if (Singleton.Instance.hashTable[getHashcode(collection["Task"])] == null)
             {
                 Singleton.Instance.hashTable[getHashcode(collection["Task"])] = new ELineales.Lista<Assignment>();
                 Singleton.Instance.hashTable[getHashcode(collection["Task"])].Add(newAssignment);
+                Singleton.Instance1.PQueue.Add(p, collection["Task"]);
             }
             else
             {
                 //mensaje de repetición
             }
-
             Singleton.Instance.hashTable[getHashcode(collection["Name"])].Add(newAssignment);
             updateFile();
-
             return View();
         }
     }
