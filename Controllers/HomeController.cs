@@ -156,7 +156,6 @@ namespace Lab3_ED1.Controllers
                 {
                     Singleton.Instance1.devTable[getHashcode(collection["Name"])] = new E_Arboles.PriorityQueue<int, string>(20);
                 }
-
                 Singleton.Instance.hashTable[getHashcode(collection["Title"])].Add(newAssignment);
                 Singleton.Instance1.devTable[getHashcode(collection["Name"])].Add(p, collection["Title"]);
             }
@@ -165,6 +164,15 @@ namespace Lab3_ED1.Controllers
                 //mensaje de repetición
             }
             updateFile();
+            return View();
+        }
+        public IActionResult ToDo()
+        {
+            return View();
+        }
+
+        public IActionResult PendingAssignment()
+        {
             return View();
         }
     }
