@@ -5,13 +5,11 @@ using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Text;
-using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.VisualBasic.FileIO;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Lab3_ED1.Models;
 
@@ -43,7 +41,7 @@ namespace Lab3_ED1.Controllers
                         var newAssignment = new Assignment
                         {
                             Name = fields[0],
-                            Title = fields[1],
+                            Task = fields[1],
                             Project = fields[2],
                             Description = fields[3],
                             Priority = Convert.ToInt32(fields[4]),
@@ -54,11 +52,8 @@ namespace Lab3_ED1.Controllers
                         {
                             Singleton.Instance.hashTable[getHashcode(fields[1])] = new ELineales.Lista<Assignment>();
                         }
-                            Project = fields[1],
-                            Description = fields[2],
-                            Priority = Convert.ToInt32(fields[3]),
-                            Date = Convert.ToDateTime(fields[4])
-                        };  
+
+
                         Singleton.Instance.hashTable[getHashcode(fields[1])].Add(newAssignment);
                     }
                 }
@@ -104,7 +99,7 @@ namespace Lab3_ED1.Controllers
                 {
                     foreach (var item in Singleton.Instance.hashTable[i])
                     {
-                        writer.WriteLine(item.Name + ";" + item.Title + ";" + item.Project + ";" + item.Description + ";" + item.Priority + ";" + item.Date);
+                        writer.WriteLine(item.Name + ";" + item.Task + ";" + item.Project + ";" + item.Description + ";" + item.Priority + ";" + item.Date);
                     }
                 }
             }
