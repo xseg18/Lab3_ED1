@@ -22,41 +22,46 @@ namespace Lab3_ED1.Controllers
         {
             Environment = _environment;
         }
-
+        public static bool start = false;
 
         public IActionResult Index()
         {
+
             try
             {
-                using (TextFieldParser txtParser = new TextFieldParser("Storage_File.txt"))
+                if (!start)
                 {
-                    txtParser.CommentTokens = new string[] { "#" };
-                    txtParser.SetDelimiters(new string[] { ";" });
-                    txtParser.HasFieldsEnclosedInQuotes = true;
-
-                    while (!txtParser.EndOfData)
+                    using (TextFieldParser txtParser = new TextFieldParser("Storage_File.txt"))
                     {
-                        string[] fields = txtParser.ReadFields();
+                        txtParser.CommentTokens = new string[] { "#" };
+                        txtParser.SetDelimiters(new string[] { ";" });
+                        txtParser.HasFieldsEnclosedInQuotes = true;
 
-                        var newAssignment = new Assignment
+                        while (!txtParser.EndOfData)
                         {
-                            Name = fields[0],
-                            Task = fields[1],
-                            Project = fields[2],
-                            Description = fields[3],
-                            Priority = Convert.ToInt32(fields[4]),
-                            Date = Convert.ToDateTime(fields[5])
-                        };
+                            string[] fields = txtParser.ReadFields();
 
-                        if (Singleton.Instance.hashTable[getHashcode(fields[1])] == null)
-                        {
-                            Singleton.Instance.hashTable[getHashcode(fields[1])] = new ELineales.Lista<Assignment>();
+                            var newAssignment = new Assignment
+                            {
+                                Name = fields[0],
+                                Task = fields[1],
+                                Project = fields[2],
+                                Description = fields[3],
+                                Priority = Convert.ToInt32(fields[4]),
+                                Date = Convert.ToDateTime(fields[5])
+                            };
+
+                            if (Singleton.Instance.hashTable[getHashcode(fields[1])] == null)
+                            {
+                                Singleton.Instance.hashTable[getHashcode(fields[1])] = new ELineales.Lista<Assignment>();
+
+                            }
+                            Singleton.Instance1.PQueue.Add(Convert.ToInt32(fields[4]), Convert.ToString(fields[1]));
+                            Singleton.Instance.hashTable[getHashcode(fields[1])].Add(newAssignment);
                         }
-
-
-                        Singleton.Instance.hashTable[getHashcode(fields[1])].Add(newAssignment);
                     }
                 }
+                start = true;
                 return View();
             }
             catch
@@ -65,6 +70,7 @@ namespace Lab3_ED1.Controllers
                 return View();
             }
         }
+        
 
         public IActionResult Privacy()
         {
@@ -138,10 +144,10 @@ namespace Lab3_ED1.Controllers
                 Task = collection["Task"]
             };
             Singleton.Instance1.PQueue.Add(p, collection["Task"]);
-            if (Singleton.Instance.hashTable[getHashcode(collection["Name"])] == null)
+            if (Singleton.Instance.hashTable[getHashcode(collection["Task"])] == null)
             {
-                Singleton.Instance.hashTable[getHashcode(collection["Name"])] = new ELineales.Lista<Assignment>();
-                Singleton.Instance.hashTable[getHashcode(collection["Name"])].Add(newAssignment);
+                Singleton.Instance.hashTable[getHashcode(collection["Task"])] = new ELineales.Lista<Assignment>();
+                Singleton.Instance.hashTable[getHashcode(collection["Task"])].Add(newAssignment);
             }
             else
             {
