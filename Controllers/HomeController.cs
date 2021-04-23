@@ -22,21 +22,24 @@ namespace Lab3_ED1.Controllers
         {
             Environment = _environment;
         }
-
+        public static bool start = false;
 
         public IActionResult Index()
         {
+
             try
             {
-                using (TextFieldParser txtParser = new TextFieldParser("Storage_File.txt"))
+                if (!start)
                 {
-                    txtParser.CommentTokens = new string[] { "#" };
-                    txtParser.SetDelimiters(new string[] { ";" });
-                    txtParser.HasFieldsEnclosedInQuotes = true;
-
-                    while (!txtParser.EndOfData)
+                    using (TextFieldParser txtParser = new TextFieldParser("Storage_File.txt"))
                     {
-                        string[] fields = txtParser.ReadFields();
+                        txtParser.CommentTokens = new string[] { "#" };
+                        txtParser.SetDelimiters(new string[] { ";" });
+                        txtParser.HasFieldsEnclosedInQuotes = true;
+
+                        while (!txtParser.EndOfData)
+                        {
+                            string[] fields = txtParser.ReadFields();
 
                         var newAssignment = new Assignment
                         {
@@ -48,15 +51,17 @@ namespace Lab3_ED1.Controllers
                             Date = Convert.ToDateTime(fields[5])
                         };
 
-                        if (Singleton.Instance.hashTable[getHashcode(fields[1])] == null)
-                        {
-                            Singleton.Instance.hashTable[getHashcode(fields[1])] = new ELineales.Lista<Assignment>();
+                            if (Singleton.Instance.hashTable[getHashcode(fields[1])] == null)
+                            {
+                                Singleton.Instance.hashTable[getHashcode(fields[1])] = new ELineales.Lista<Assignment>();
+
+                            }
+                            Singleton.Instance1.PQueue.Add(Convert.ToInt32(fields[4]), Convert.ToString(fields[1]));
+                            Singleton.Instance.hashTable[getHashcode(fields[1])].Add(newAssignment);
                         }
-
-
-                        Singleton.Instance.hashTable[getHashcode(fields[1])].Add(newAssignment);
                     }
                 }
+                start = true;
                 return View();
             }
             catch
@@ -65,6 +70,7 @@ namespace Lab3_ED1.Controllers
                 return View();
             }
         }
+        
 
         public IActionResult Privacy()
         {
@@ -120,7 +126,7 @@ namespace Lab3_ED1.Controllers
             {
                 p = 0;
             }
-            else if(Convert.ToString(collection["Priority"]) == "Media")
+            else if (Convert.ToString(collection["Priority"]) == "Media")
             {
                 p = 1;
             }
@@ -138,10 +144,15 @@ namespace Lab3_ED1.Controllers
                 Priority = p,
                 Date = Convert.ToDateTime(collection["Date"])
             };
-
-            if (Singleton.Instance.hashTable[getHashcode(collection["Name"])] == null)
+            Singleton.Instance1.PQueue.Add(p, collection["Task"]);
+            if (Singleton.Instance.hashTable[getHashcode(collection["Task"])] == null)
             {
-                Singleton.Instance.hashTable[getHashcode(collection["Name"])] = new ELineales.Lista<Assignment>();
+                Singleton.Instance.hashTable[getHashcode(collection["Task"])] = new ELineales.Lista<Assignment>();
+                Singleton.Instance.hashTable[getHashcode(collection["Task"])].Add(newAssignment);
+            }
+            else
+            {
+                //mensaje de repetición
             }
 
             Singleton.Instance.hashTable[getHashcode(collection["Name"])].Add(newAssignment);

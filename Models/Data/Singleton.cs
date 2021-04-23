@@ -9,10 +9,12 @@ namespace Lab3_ED1.Models
     {
         private readonly static Singleton _instance = new Singleton();
         public ELineales.Lista<Assignment>[] hashTable;
-
+        private readonly static Singleton _instance1 = new Singleton();
+        public E_Arboles.PriorityQueue<int, string> PQueue;
         private Singleton()
         {
             hashTable = new ELineales.Lista<Assignment>[20];
+            PQueue = new E_Arboles.PriorityQueue<int, string>(20);
         }
 
         public static Singleton Instance
@@ -20,6 +22,14 @@ namespace Lab3_ED1.Models
             get
             {
                 return _instance;
+            }
+        }
+
+        public static Singleton Instance1
+        {
+            get
+            {
+                return _instance1;
             }
         }
     }
