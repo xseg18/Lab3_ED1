@@ -41,7 +41,7 @@ namespace Lab3_ED1.Controllers
                         var newAssignment = new Assignment
                         {
                             Name = fields[0],
-                            Task = fields[1],
+                            Title = fields[1],
                             Project = fields[2],
                             Description = fields[3],
                             Priority = Convert.ToInt32(fields[4]),
@@ -99,7 +99,7 @@ namespace Lab3_ED1.Controllers
                 {
                     foreach (var item in Singleton.Instance.hashTable[i])
                     {
-                        writer.WriteLine(item.Name + ";" + item.Task + ";" + item.Project + ";" + item.Description + ";" + item.Priority + ";" + item.Date);
+                        writer.WriteLine(item.Name + ";" + item.Title + ";" + item.Project + ";" + item.Description + ";" + item.Priority + ";" + item.Date);
                     }
                 }
             }
@@ -115,7 +115,7 @@ namespace Lab3_ED1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddAssignment(IFormCollection collection)
         {
-            int p = 0;
+            int p;
             if (Convert.ToString(collection["Priority"]) == "Alta")
             {
                 p = 0;
@@ -128,21 +128,25 @@ namespace Lab3_ED1.Controllers
             {
                 p = 2;
             }
+
             var newAssignment = new Assignment
             {
                 Name = collection["Name"],
-                Description = collection["Description"],
-                Date = Convert.ToDateTime(collection["Date"]),
-                Project = Convert.ToString(collection["Project"]),
+                Title = collection["Title"],
+                Project = collection["Project"],
+                Description = collection["Desciption"],
                 Priority = p,
-                Task = collection["Task"]
+                Date = Convert.ToDateTime(collection["Date"])
             };
 
             if (Singleton.Instance.hashTable[getHashcode(collection["Name"])] == null)
             {
                 Singleton.Instance.hashTable[getHashcode(collection["Name"])] = new ELineales.Lista<Assignment>();
             }
+
             Singleton.Instance.hashTable[getHashcode(collection["Name"])].Add(newAssignment);
+            updateFile();
+
             return View();
         }
     }
