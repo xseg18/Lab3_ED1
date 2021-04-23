@@ -8,9 +8,12 @@ namespace Lab3_ED1.Models
 {
     public class Assignment
     {
-        [Display(Name = "Título")]
+        [Display(Name = "Nombre")]
         [Required]
         public string Name { get; set; }
+        [Display(Name = "Título")]
+        [Required]
+        public string Title { get; set; }
         [Display(Name = "Proyecto")]
         [Required]
         public string Project { get; set; }

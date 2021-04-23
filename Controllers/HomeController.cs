@@ -43,12 +43,17 @@ namespace Lab3_ED1.Controllers
                         var newAssignment = new Assignment
                         {
                             Name = fields[0],
-                            Project = fields[1],
-                            Description = fields[2],
-                            Priority = Convert.ToInt32(fields[3]),
-                            Date = Convert.ToInt32(fields[4])
+                            Title = fields[1],
+                            Project = fields[2],
+                            Description = fields[3],
+                            Priority = Convert.ToInt32(fields[4]),
+                            Date = Convert.ToDateTime(fields[5])
                         };
 
+                        if (Singleton.Instance.hashTable[getHashcode(fields[1])] == null)
+                        {
+                            Singleton.Instance.hashTable[getHashcode(fields[1])] = new ELineales.Lista<Assignment>();
+                        }
                         Singleton.Instance.hashTable[getHashcode(fields[1])].Add(newAssignment);
                     }
                 }
@@ -94,7 +99,7 @@ namespace Lab3_ED1.Controllers
                 {
                     foreach (var item in Singleton.Instance.hashTable[i])
                     {
-                        writer.WriteLine(item.Name + ";" + item.Project + ";" + item.Description + ";" + item.Priority + ";" + item.Date);
+                        writer.WriteLine(item.Name + ";" + item.Title + ";" + item.Project + ";" + item.Description + ";" + item.Priority + ";" + item.Date);
                     }
                 }
             }
@@ -116,9 +121,14 @@ namespace Lab3_ED1.Controllers
                 Description = collection["Description"],
                 Date = Convert.ToDateTime(collection["Date"]),
                 Project = Convert.ToString(collection["Project"]),
-                Priority = collection["Priority"]
+                Priority = 1
             };
-            //agregar al hash
+
+            if (Singleton.Instance.hashTable[getHashcode(collection["Name"])] == null)
+            {
+                Singleton.Instance.hashTable[getHashcode(collection["Name"])] = new ELineales.Lista<Assignment>();
+            }
+            Singleton.Instance.hashTable[getHashcode(collection["Name"])].Add(newAssignment);
             return View();
         }
     }
