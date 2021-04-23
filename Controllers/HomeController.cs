@@ -1,11 +1,15 @@
-﻿using Lab3_ED1.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
+using System.IO;
+using System.Data;
 using System.Linq;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
+using Lab3_ED1.Models;
 
 namespace Lab3_ED1.Controllers
 {
@@ -32,6 +36,27 @@ namespace Lab3_ED1.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult AddAssignment()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddAssignment(IFormCollection collection)
+        {
+            var newAssignment = new Assignment
+            {
+                Name = collection["Name"],
+                Description = collection["Description"],
+                Date = Convert.ToDateTime(collection["Date"]),
+                Project = Convert.ToString(collection["Project"]),
+                Priority = collection["Priority"]
+            };
+            //agregar al hash
+            return View();
         }
     }
 }
