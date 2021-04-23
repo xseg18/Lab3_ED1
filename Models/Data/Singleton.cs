@@ -12,7 +12,7 @@ namespace Lab3_ED1.Models
 
         private Singleton()
         {
-            hashTable = new ELineales.Lista<Assignment>[10];
+            hashTable = new ELineales.Lista<Assignment>[20];
         }
 
         public static Singleton Instance

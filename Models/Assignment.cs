@@ -10,19 +10,16 @@ namespace Lab3_ED1.Models
     {
         [Display(Name = "Nombre")]
         [Required]
-        public int Name { get; set; }
+        public string Name { get; set; }
         [Display(Name = "Proyecto")]
         [Required]
         public string Project { get; set; }
-        [Display(Name = "Precio")]
-        [Required]
-        public decimal Price { get; set; }
         [Display(Name = "Descripción")]
         [Required]
         public string Description { get; set; }
         [Display(Name = "Prioridad")]
         [Required]
-        public string Priority { get; set; }
+        public int Priority { get; set; }
         [Display(Name = "Fecha de entrega")]
         [Required]
         public int Date { get; set; }
