@@ -120,7 +120,7 @@ namespace Lab3_ED1.Controllers
             {
                 p = 0;
             }
-            else if(Convert.ToString(collection["Priority"]) == "Media")
+            else if (Convert.ToString(collection["Priority"]) == "Media")
             {
                 p = 1;
             }
@@ -137,12 +137,16 @@ namespace Lab3_ED1.Controllers
                 Priority = p,
                 Task = collection["Task"]
             };
-
+            Singleton.Instance1.PQueue.Add(p, collection["Task"]);
             if (Singleton.Instance.hashTable[getHashcode(collection["Name"])] == null)
             {
                 Singleton.Instance.hashTable[getHashcode(collection["Name"])] = new ELineales.Lista<Assignment>();
+                Singleton.Instance.hashTable[getHashcode(collection["Name"])].Add(newAssignment);
             }
-            Singleton.Instance.hashTable[getHashcode(collection["Name"])].Add(newAssignment);
+            else
+            {
+                //mensaje de repetición
+            }
             return View();
         }
     }
