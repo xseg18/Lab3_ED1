@@ -19,7 +19,7 @@ namespace Lab3_ED1.Models
         public string Description { get; set; }
         [Display(Name = "Prioridad")]
         [Required]
-        public string Priority { get; set; }
+        public int Priority { get; set; }
         [Display(Name = "Fecha de entrega")]
         [Required]
         public DateTime Date { get; set; }
