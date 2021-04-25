@@ -200,16 +200,51 @@ namespace Lab3_ED1.Controllers
 
         public IActionResult completeAsgmt()
         {
-            Singleton.Instance1.devTable[getHashcode(Singleton.Instance.hashTable[asgmtPos][0].Name)].Pop();
-            Singleton.Instance.hashTable[asgmtPos] = null;
-            updateFile();
-            return RedirectToAction(nameof(devSearch));
+            int x = 0;
+            try
+            {
+
+                Singleton.Instance1.devTable[getHashcode(Singleton.Instance.hashTable[asgmtPos][0].Name)].Pop();
+                try
+                {
+                retry:
+                    while (Singleton.Instance.hashTable[x] == null)
+                    {
+                        x++;
+                    }
+                    if ((getHashcode(Singleton.Instance.hashTable[x][0].Name) != getHashcode(Singleton.Instance.hashTable[asgmtPos][0].Name)) || x == asgmtPos)
+                    {
+                        x++;
+                        goto retry;
+                    }
+                }
+                catch
+                {
+                    x = Singleton.Instance.hashTable.Length + 1;
+                }
+                Singleton.Instance.hashTable[asgmtPos] = null;
+                updateFile();
+                asgmtPos = x;
+                return RedirectToAction(nameof(Developer));
+            }
+            catch
+            {
+                return RedirectToAction(nameof(proyectManager));
+            }
         }
 
         public IActionResult Developer()
         {
-            var viewAsgmt = Singleton.Instance.hashTable[asgmtPos][0];
-            return View(viewAsgmt);
+            if (asgmtPos != Singleton.Instance.hashTable.Length + 1)
+            {
+                var viewAsgmt = Singleton.Instance.hashTable[asgmtPos][0];
+                return View(viewAsgmt);
+            }
+            else
+            {
+                ViewData["Error"] = "El desarrollador no tiene proyectos pendientes.";
+                return View();
+            }
         }
 
         public IActionResult proyectManager()
