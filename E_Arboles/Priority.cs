@@ -138,29 +138,43 @@ namespace E_Arboles
         {
             Y safe = root.Data;
             Node remp = FindLast();
-            root.Key = remp.Key;
-            root.Data = remp.Data;
-            Balance(root, null);
+            if (remp != root)
+            {
+                root.Key = remp.Key;
+                root.Data = remp.Data;
+                Balance(root, null);
+            }
+            else
+            {
+                root = null;
+            }
             return safe;
         }
         
         Node FindLast()
         {
-            Y last = Queue[pos - 1];
-            decimal parentpos = Math.Floor(Convert.ToDecimal((pos - 1) / 2));
-            Y parentdata = Queue[Convert.ToInt32(parentpos)];
-            Node newroot = Find(last, root);
-            Node oldroot = Find(parentdata, root);
-            if((pos-1)%2 == 0)
+            if (pos - 1 != 1)
             {
-                oldroot.Left = null;
+                Y last = Queue[pos - 1];
+                decimal parentpos = Math.Floor(Convert.ToDecimal((pos - 1) / 2));
+                Y parentdata = Queue[Convert.ToInt32(parentpos)];
+                Node newroot = Find(last, root);
+                Node oldroot = Find(parentdata, root);
+                if ((pos - 1) % 2 == 0)
+                {
+                    oldroot.Left = null;
+                }
+                else
+                {
+                    oldroot.Right = null;
+                }
+                pos--;
+                return newroot;
             }
             else
             {
-                oldroot.Right = null;
+                return root;
             }
-            pos--;
-            return newroot;
         }
         Node Find(Y data, Node top)
         {

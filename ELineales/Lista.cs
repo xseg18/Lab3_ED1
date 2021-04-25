@@ -11,14 +11,14 @@ namespace ELineales
 			public Node Next;
 			public T Data;
 		}
-		Node Top = new Node();
+		Node Top;
 
 		public void Add(T item)
 		{
 			Node agregar = new Node();
 			agregar.Data = item;
 			agregar.Next = null;
-			if (Top != null)
+			if (Top == null)
 			{
 				Top = agregar;
 			}
