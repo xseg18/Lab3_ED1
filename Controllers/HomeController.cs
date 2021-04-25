@@ -126,47 +126,41 @@ namespace Lab3_ED1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult addAsgmt(IFormCollection collection)
         {
-            int p;
-            if (Convert.ToString(collection["Priority"]) == "Alta")
+            try
             {
-                p = 0;
-            }
-            else if (Convert.ToString(collection["Priority"]) == "Media")
-            {
-                p = 1;
-            }
-            else
-            {
-                p = 2;
-            }
-
-            var newAssignment = new Assignment
-            {
-                Name = collection["Name"].ToString().ToUpper(),
-                Title = collection["Title"],
-                Project = collection["Project"],
-                Description = collection["Description"],
-                Priority = p,
-                Date = Convert.ToDateTime(collection["Date"])
-            };
-
-            if (Singleton.Instance.hashTable[getHashcode(collection["Title"])] == null)
-            {
-                Singleton.Instance.hashTable[getHashcode(collection["Title"])] = new ELineales.Lista<Assignment>();
-
-                if (Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())] == null)
+                var newAssignment = new Assignment
                 {
-                    Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())] = new E_Arboles.PriorityQueue<int, string>(20);
+                    Name = collection["Name"].ToString().ToUpper(),
+                    Title = collection["Title"],
+                    Project = collection["Project"],
+                    Description = collection["Description"],
+                    Priority = Convert.ToInt32(collection["Priority"]),
+                    Date = Convert.ToDateTime(collection["Date"])
+                };
+
+                if (Singleton.Instance.hashTable[getHashcode(collection["Title"])] == null)
+                {
+                    Singleton.Instance.hashTable[getHashcode(collection["Title"])] = new ELineales.Lista<Assignment>();
+
+                    if (Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())] == null)
+                    {
+                        Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())] = new E_Arboles.PriorityQueue<int, string>(20);
+                    }
+                    Singleton.Instance.hashTable[getHashcode(collection["Title"])].Add(newAssignment);
+                    Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())].Add(Convert.ToInt32(collection["Priority"]), collection["Title"]);
                 }
-                Singleton.Instance.hashTable[getHashcode(collection["Title"])].Add(newAssignment);
-                Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())].Add(p, collection["Title"]);
+                else
+                {
+                    ViewData["Error"] = "La tarea ya existe, por favor intente nuevamente.";
+                }
+                updateFile();
+                return View();
             }
-            else
+            catch
             {
-                ViewData["Error"] = "La tarea ya existe, por favor intente nuevamente.";
+                ViewData["Error"] = "Ingrese todos los datos pedidos";
+                return View();
             }
-            updateFile();
-            return View();
         }
 
         public IActionResult devSearch()
@@ -209,7 +203,7 @@ namespace Lab3_ED1.Controllers
             Singleton.Instance1.devTable[getHashcode(Singleton.Instance.hashTable[asgmtPos][0].Name)].Pop();
             Singleton.Instance.hashTable[asgmtPos] = null;
             updateFile();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(devSearch));
         }
 
         public IActionResult Developer()
@@ -220,11 +214,24 @@ namespace Lab3_ED1.Controllers
 
         public IActionResult proyectManager()
         {
+            Singleton.Instance2.proyectManager.Clear();
             for (int i = 0; i < Singleton.Instance.hashTable.Length; i++)
             {
                 if (Singleton.Instance.hashTable[i] != null)
                 {
                     Singleton.Instance2.proyectManager.Add(Singleton.Instance.hashTable[i][0]);
+                }
+            }
+            for (int j = 0; j < Singleton.Instance2.proyectManager.Count(); j++)
+            {
+                for (int i = 0; i < Singleton.Instance2.proyectManager.Count() - 1; i++)
+                {
+                    if (Singleton.Instance2.proyectManager[i+1].Priority < Singleton.Instance2.proyectManager[i].Priority)
+                    {
+                        Assignment temp = Singleton.Instance2.proyectManager[i + 1];
+                        Singleton.Instance2.proyectManager[i + 1] = Singleton.Instance2.proyectManager[i];
+                        Singleton.Instance2.proyectManager[i] = temp;
+                    }
                 }
             }
             return View(Singleton.Instance2.proyectManager);

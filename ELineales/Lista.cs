@@ -163,12 +163,8 @@ namespace ELineales
 		}
 		public void Clear()
 		{
-			Node temp = Top;
-			while (temp != null)
-			{
-				temp = null;
-				temp = temp.Next;
-			}
+			Top = null;
 		}
+
 	}
 }
