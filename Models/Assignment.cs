@@ -24,7 +24,7 @@ namespace Lab3_ED1.Models
         [Display(Name = "Fecha de entrega")]
         [Required]
         public DateTime Date { get; set; }
-        [Display(Name = "Developer")]
+        [Display(Name = "Desarrollador")]
         [Required]
         public string Name { get; set; }
     }

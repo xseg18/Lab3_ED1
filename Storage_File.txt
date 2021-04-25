@@ -1,0 +1,2 @@
+JUAN GONZÁLEZ;Laboratorio 1;Controladores;Se deben de crear los controladores;0;30/04/2021 18:41:00
+XIMENA GOBERN;Laboratorio 2;Vistas;Se deben de crear las vistas;2;26/04/2021 19:33:00

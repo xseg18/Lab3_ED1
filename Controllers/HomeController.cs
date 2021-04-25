@@ -17,12 +17,14 @@ namespace Lab3_ED1.Controllers
 {
     public class HomeController : Controller
     {
+        public static int asgmtPos;
+        public static bool start = false;
+
         private IHostingEnvironment Environment;
         public HomeController(IHostingEnvironment _environment)
         {
             Environment = _environment;
         }
-        public static bool start = false;
 
         public IActionResult Index()
         {
@@ -115,14 +117,14 @@ namespace Lab3_ED1.Controllers
             writer.Close();
         }
 
-        public IActionResult AddAssignment()
+        public IActionResult addAsgmt()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddAssignment(IFormCollection collection)
+        public IActionResult addAsgmt(IFormCollection collection)
         {
             int p;
             if (Convert.ToString(collection["Priority"]) == "Alta")
@@ -140,7 +142,7 @@ namespace Lab3_ED1.Controllers
 
             var newAssignment = new Assignment
             {
-                Name = collection["Name"],
+                Name = collection["Name"].ToString().ToUpper(),
                 Title = collection["Title"],
                 Project = collection["Project"],
                 Description = collection["Description"],
@@ -152,28 +154,80 @@ namespace Lab3_ED1.Controllers
             {
                 Singleton.Instance.hashTable[getHashcode(collection["Title"])] = new ELineales.Lista<Assignment>();
 
-                if (Singleton.Instance1.devTable[getHashcode(collection["Name"])] == null)
+                if (Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())] == null)
                 {
-                    Singleton.Instance1.devTable[getHashcode(collection["Name"])] = new E_Arboles.PriorityQueue<int, string>(20);
+                    Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())] = new E_Arboles.PriorityQueue<int, string>(20);
                 }
                 Singleton.Instance.hashTable[getHashcode(collection["Title"])].Add(newAssignment);
-                Singleton.Instance1.devTable[getHashcode(collection["Name"])].Add(p, collection["Title"]);
+                Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())].Add(p, collection["Title"]);
             }
             else
             {
-                //mensaje de repetición
+                ViewData["Error"] = "La tarea ya existe, por favor intente nuevamente.";
             }
             updateFile();
             return View();
         }
-        public IActionResult ToDo()
+
+        public IActionResult devSearch()
         {
             return View();
         }
 
-        public IActionResult PendingAssignment()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult devSearch(IFormCollection collection)
         {
-            return View();
+            try
+            {
+                if (Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())] == null)
+                {
+                    ViewData["Error"] = "El desarrollador no ha sido encontrado";
+                    return View();
+                }
+                else if (Singleton.Instance.hashTable[getHashcode(Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())].Peek())] != null)
+                {
+                    asgmtPos = getHashcode(Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())].Peek());
+                    return RedirectToAction(nameof(Developer));
+                }
+                else if (Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())].Peek() == null)
+                {
+                    ViewData["Error"] = "El desarrollador no tiene proyectos pendientes.";
+                    return View();
+                }
+                return View();
+            }
+            catch
+            {
+                ViewData["Error"] = "Un error inesperado ha ocurrido, por favor intente nuevamente.";
+                return View();
+            }
+        }
+
+        public IActionResult completeAsgmt()
+        {
+            Singleton.Instance1.devTable[getHashcode(Singleton.Instance.hashTable[asgmtPos][0].Name)].Pop();
+            Singleton.Instance.hashTable[asgmtPos] = null;
+            updateFile();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Developer()
+        {
+            var viewAsgmt = Singleton.Instance.hashTable[asgmtPos][0];
+            return View(viewAsgmt);
+        }
+
+        public IActionResult proyectManager()
+        {
+            for (int i = 0; i < Singleton.Instance.hashTable.Length; i++)
+            {
+                if (Singleton.Instance.hashTable[i] != null)
+                {
+                    Singleton.Instance2.proyectManager.Add(Singleton.Instance.hashTable[i][0]);
+                }
+            }
+            return View(Singleton.Instance2.proyectManager);
         }
     }
 }

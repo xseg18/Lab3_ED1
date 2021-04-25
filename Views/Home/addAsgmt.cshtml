@@ -2,13 +2,18 @@
 @{
     ViewData["Title"] = "Agregar";
 }
+
+<h1>Nueva Tarea</h1>
+
+<h4>Información Principal</h4>
+<hr />
 <div class="text-center">
-    <h4 class="display-4">Nueva Tarea</h4>
-    <hr />
+    <p style="font-size:larger; color:red">@ViewData["Error"]</p>
 </div>
+
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AddAssignment">
+        <form asp-action="addAsgmt">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
