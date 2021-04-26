@@ -132,7 +132,14 @@ namespace E_Arboles
         }
         public Y Peek()
         {
-            return root.Data;
+            if (root == null)
+            {
+                return default(Y);
+            }
+            else
+            {
+                return root.Data;
+            }
         }
         public Y Pop()
         {

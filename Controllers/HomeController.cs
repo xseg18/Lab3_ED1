@@ -148,6 +148,7 @@ namespace Lab3_ED1.Controllers
                     }
                     Singleton.Instance.hashTable[getHashcode(collection["Title"])].Add(newAssignment);
                     Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())].Add(Convert.ToInt32(collection["Priority"]), collection["Title"]);
+                    ViewData["Success"] = "Tarea agregada existosamente.";
                 }
                 else
                 {
@@ -158,7 +159,7 @@ namespace Lab3_ED1.Controllers
             }
             catch
             {
-                ViewData["Error"] = "Ingrese todos los datos pedidos";
+                ViewData["Error"] = "Ingrese todos los datos solicitados.";
                 return View();
             }
         }
@@ -176,7 +177,12 @@ namespace Lab3_ED1.Controllers
             {
                 if (Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())] == null)
                 {
-                    ViewData["Error"] = "El desarrollador no ha sido encontrado";
+                    ViewData["Error"] = "El desarrollador no ha sido encontrado.";
+                    return View();
+                }
+                else if (Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())].Peek() == null)
+                {
+                    ViewData["Error"] = "El desarrollador no tiene tareas pendientes.";
                     return View();
                 }
                 else if (Singleton.Instance.hashTable[getHashcode(Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())].Peek())] != null)
@@ -184,11 +190,7 @@ namespace Lab3_ED1.Controllers
                     asgmtPos = getHashcode(Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())].Peek());
                     return RedirectToAction(nameof(Developer));
                 }
-                else if (Singleton.Instance1.devTable[getHashcode(collection["Name"].ToString().ToUpper())].Peek() == null)
-                {
-                    ViewData["Error"] = "El desarrollador no tiene proyectos pendientes.";
-                    return View();
-                }
+
                 return View();
             }
             catch
@@ -242,7 +244,7 @@ namespace Lab3_ED1.Controllers
             }
             else
             {
-                ViewData["Error"] = "El desarrollador no tiene proyectos pendientes.";
+                ViewData["Error"] = "El desarrollador no tiene tareas pendientes.";
                 return View();
             }
         }
